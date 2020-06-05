@@ -1,11 +1,18 @@
+import csv
+
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
+
+# city,state_name,county_name,lat,lng,population,density,timezone,zips
 
 class City:
   def __init__(self, name, lat, lon):
     self.name = name
     self.lat = lat
     self.lon = lon
+
+  def __str__(self):
+    return f'City({self.name}, {self.lat}, {self.lon})'
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -14,21 +21,49 @@ class City:
 # to read this file so that each record is imported into a City instance. Then
 # return the list with all the City instances from the function.
 # Google "python 3 csv" for references and use your Google-fu for other examples.
-#
+
+
+
 # Store the instances in the "cities" list, below.
 #
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
 cities = []
 
-def cityreader(cities=[]):
+
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the
   # `cities` list
 
-    return cities
+def cityreader(cities=[]):
+  with open("cities.csv", newline="") as cr:
+      line = csv.DictReader(cr)
+      for lines in line:
+            cities.append(City(lines['city'], float(lines['lat']), float(lines['lng'])))
+  return cities
 
-cityreader(cities)
+  # NOT SURE ABOUT THIS ONE...
+  # with open("cities.csv") as cr:
+  #   data = csv.DictReader(cr, delimiter=",")
+  #   for row in data:
+  #     city = City(row["city"], float(row["lat"]), float(row["lng"]))
+  #     cities.append(city)
+  # return cities
+
+  # THIS DID NOT WORK... with open("cities.csv") as csv_file:
+#   # csv_reader = csv_reader(csv_file)
+#   line_count = 0
+#   for row in csv_file:
+#     if line_count == 0:
+#       print(f'Colunm names are {", ".join(row)}')
+#       line_count += 1
+#     else:
+#       print(f'\t{row[1]} is a US city located at these coordinates {row[1]}, {row[1]}.')
+#       line_count +=1
+#   print(f'Processed {line_count} lines')
+
+
+  cityreader(cities)
 
 # Print the list of cities (name, lat, lon), 1 record per line.
 for c in cities:
